@@ -117,6 +117,17 @@ Mặt nạ:       [False, False,  True, False,  True, False ]
 Kết quả lọc:                  [110]         [130]
 """
 
+''' 3. Bản chất bộ nhớ (Memory Detail) '''
+# khác với slicing, boolean masking luôn tạo ra một copy
+#-> Vì sau khi lọc, các phần tử thỏa mãn điều kiện (ví dụ 110 và 130) nằm rải rác, không còn tuân theo quy luật liên tục (contiguous) của RAM nữa. NumPy buộc phải nhặt chúng ra, gom lại và cấp phát một vùng RAM mới để chứa mảng kết quả.
 
+# Hệ thống smartwatch bây giờ yêu cầu phức tạp hơn: Nó muốn lọc ra các nhịp tim nằm trong khoảng "Bình thường nhưng hơi cao", tức là lớn hơn 80 VÀ nhỏ hơn 100. Trong Python thuần, bạn thường dùng từ khóa and (ví dụ: x > 80 and x < 100). Tuy nhiên, nếu bạn gõ mat_na = (nhip_tim > 80) and (nhip_tim < 100) trong NumPy, chương trình sẽ báo lỗi (ValueError).
+#-> giải pháp: Bitwise Operators (Toán tử mức Bit), chúng ta phải dùng các ký hiệu toán học cấp thấp để ép CPU đọ từng cặp phần tử một (Element-wise/Bitwise): VÀ (AND) - Dùng ký hiệu &; HOẶC (OR) - Dùng ký hiệu |; PHỦ ĐỊNH (NOT) - Dùng ký hiệu ~
+nhip_tim_moi = np.array([72, 85, 110, 65, 130, 75])
 
+# Cực kỳ quan trọng: Bắt buộc phải có dấu ngoặc tròn () bao quanh mỗi điều kiện
+# Vì các ký hiệu &, | có độ ưu tiên cực cao trong Python, cao hơn cả dấu > và <
+mat_na_moi = (nhip_tim_moi > 80) & (nhip_tim_moi < 100)
+print("Mặt nạ:", mat_na_moi) # Output: [False  True False False False False]
+print("Nhịp tim cần theo dõi:", nhip_tim_moi[mat_na_moi]) # Output: [85]
 
