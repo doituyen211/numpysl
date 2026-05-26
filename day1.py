@@ -131,3 +131,73 @@ mat_na_moi = (nhip_tim_moi > 80) & (nhip_tim_moi < 100)
 print("Mặt nạ:", mat_na_moi) # Output: [False  True False False False False]
 print("Nhịp tim cần theo dõi:", nhip_tim_moi[mat_na_moi]) # Output: [85]
 
+print('----------------------------------------------------------')
+
+# Bài học số 5: Thao tác thay đổi dữ liệu bằng MASKING (DATA CLIPING)
+#Trong ML, boolean masking không chỉ để dùng để "lọc" trích xuất mà còn dùng để "dọn dẹp" (cleaning) dữ liệu rác
+nhiet_do = np.array([25.5, 26.1, -999.0, 25.8, 9999.0, 24.9])
+
+# Thay thế các giá trị bất thường bằng một giá trị an toàn (ví dụ: 0)
+# Đây là thao tác CỰC KỲ NHANH, thay đổi trực tiếp trên bộ nhớ gốc (In-place)
+nhiet_do[nhiet_do < -50] = 0
+nhiet_do[nhiet_do > 100] = 0
+
+print("Nhiệt độ đã dọn dẹp:", nhiet_do)# Output: [25.5 26.1  0.   25.8  0.  24.9]
+
+print('----------------------------------------------------------')
+
+'''AXIS(trục) và AGGREGATION(các phép tính gom nhóm)'''
+# Bài 6: AXIS (trục)
+''' 
+Trong numpy 2D thì:
+* axis = 0: là thực hiện phép tính từ trên xuống dưới (xuyên qua các hàng), khi thực hiện phép toán trên axis = 0, máy tính sẽ ép tất cả các hàng lại với nhau => kết quả nhận được là thông tin của từng cột.
+* axis = 1: là thực hiện phép tính từ trái qua phải (xuyên qua các cột), khi thực hiện phép tính trên axis = 1, máy tính sẽ ép tất cả các cột lại với nhau => kết quả nhận được là thông tin của từng hàng.
+'''
+"""
+Trực quan hóa:
+
+          [Cột 0]  [Cột 1]  [Cột 2]  [Cột 3]
+           Toán     Lý       Hóa      Sinh
+         -----------------------------------
+[Hàng 0] |   8        7        9        8   |  Học sinh A
+[Hàng 1] |   5        6        5        7   |  Học sinh B
+[Hàng 2] |   9        9       10        9   |  Học sinh C
+         -----------------------------------
+
+Nếu tính np.mean(axis=1) ---> Di chuyển ngang: Ép Toán, Lý, Hóa, Sinh lại. 
+=> Ra điểm trung bình của từng HỌC SINH (Hàng).
+
+Nếu tính np.mean(axis=0) | Di chuyển dọc: Ép Học sinh A, B, C lại.
+                         v
+=> Ra điểm trung bình của từng MÔN HỌC (Cột).
+"""
+bang_diem = np.array([
+    [8, 7, 8, 9],
+    [5, 6, 5, 7],
+    [9, 9, 10, 9]
+])
+# tính điểm trung bình của từng học sinh - ép dọc theo hàng ngang: axis=1
+diem_tb_hoc_sinh = np.mean(bang_diem, axis=1)
+print("điểm trung bình của A, B, C: ", diem_tb_hoc_sinh)
+# tính môn học khó nhất - ép ngang theo hàng dọc: axis=0
+diem_min_mon_hoc = np.min(bang_diem, axis=0)
+print("điểm thấp nhất của toán, lí, hoá, sinh: ", diem_min_mon_hoc)
+'''
+Giả sử nhà trường quyết định cộng điểm thưởng cho các môn học. Vì môn Hóa khó, trường cộng 2 điểm, Lý cộng 1 điểm, Toán và Sinh không cộng. Chúng ta có một mảng điểm thưởng 1D như sau:
+diem_thuong = np.array([0, 1, 2, 0])
+
+Bạn để ý thấy:
+
+ - bang_diem là ma trận 2D có shape (3, 4)
+
+ - diem_thuong là mảng 1D có shape (4,)
+
+=> tuy kích thước không giống nhau nhưng hoàn toàn có thể dùng: bang_diem_moi = bang_diem + diem_thuong
+NumPy tự động nhận diện diem_thuong có 4 phần tử (khớp với 4 cột môn học), nên nó "copy ảo" cái mảng thưởng này ra làm 3 bản để cộng đều cho 3 học sinh (mà không hề tốn thêm RAM) - BROADCASTING.
+'''
+print('----------------------------------------------------------')
+
+
+
+
+
