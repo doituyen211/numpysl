@@ -1,3 +1,7 @@
+## Đặc biệt
+
+- [ ] Thiết kế hệ thống agentic cho company
+
 ## Mục tiêu
 
 Hoàn thiện quá trình **Phỏng vấn Khám phá & Xác định Bài toán**, kiểm tra **AI Readiness**, lựa chọn mức độ giải pháp phù hợp, đánh giá tính khả thi và chốt quyết định **Go / Not Yet / No-Go**.
